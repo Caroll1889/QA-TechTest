@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
-import { faker } from "@faker-js/faker/locale/en_US";
+
 
 export default class AddembersPage {
   readonly page: Page;
@@ -12,7 +12,7 @@ export default class AddembersPage {
     });
   }
 
-  async addMembers() {
+  async addMembers(email: string, firstName: string, lastName: string) {
     const [newPage] = await Promise.all([
       this.page.waitForEvent("popup"),
       this.householdName.click(),
@@ -30,9 +30,7 @@ export default class AddembersPage {
       "Add Household Member",
       { exact: true }
     );
-    const fakeEmail = faker.internet.email();
-    const fakeName = faker.person.firstName();
-    const fakeLastName = faker.person.lastName();
+    
 
     await expect(
       newPage.getByRole("heading", { name: "Legal New Name LastName" })
@@ -44,16 +42,16 @@ export default class AddembersPage {
     await addMemberButton.click();
     await expect(addMemberParagraph).toBeVisible();
 
-    await newPage.getByRole("textbox", { name: "Email" }).fill(fakeEmail);
-    await newPage.getByRole("textbox", { name: "First Name" }).fill(fakeName);
+    await newPage.getByRole("textbox", { name: "Email" }).fill(email);
+    await newPage.getByRole("textbox", { name: "First Name" }).fill(firstName);
     await newPage
       .getByRole("textbox", { name: "Last Name" })
-      .fill(fakeLastName);
+      .fill(lastName);
     await newPage
       .getByRole("textbox", { name: "Phone number" })
       .fill("3103333333");
     await addMemberButtonText.click();
     await expect(newPage.getByText('Member added!')).toBeVisible()
-    await expect(newPage.getByText(`${fakeName} ${fakeLastName}`)).toBeVisible()
+    await expect(newPage.getByText(`${firstName} ${lastName}`)).toBeVisible()
   }
 }
