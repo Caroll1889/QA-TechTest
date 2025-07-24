@@ -4,6 +4,7 @@ import { faker } from "@faker-js/faker/locale/en_US";
 import Loginpage from "../Pages/LoginPage";
 import AddembersPage from "../Pages/AddMembers";
 import EditMembers from "../Pages/EditMembersPage";
+import DeleteMembers from "../Pages/DeleteMembersPage";
 
 
 test.describe("Modify Members List", () => {
@@ -30,24 +31,33 @@ test.describe("Modify Members List", () => {
     const fakeEmail = faker.internet.email();
     const fakeName = faker.person.firstName();
     const fakeLastName = faker.person.lastName()
-
     const addMembersPage = new AddembersPage(page);
 
     await expect(page).toHaveURL(
       "https://dashboard-test.zoefin.com/dashboard/pipeline"
     );
     await expect(page.getByRole("heading", { name: "Pipeline" })).toBeVisible();
-
     await addMembersPage.addMembers(fakeEmail, fakeName, fakeLastName);
   });
 
   test("Edit members", async ({ page }) => {
     const editMembersPage = new EditMembers(page);
+    
     await expect(page).toHaveURL(
       "https://dashboard-test.zoefin.com/dashboard/pipeline"
     );
     await expect(page.getByRole("heading", { name: "Pipeline" })).toBeVisible();
-
     await editMembersPage.editMembers();
+  });
+
+  test("Delete members", async ({ page }) => {
+    const deleteMembersPage = new DeleteMembers(page);
+    
+    await expect(page).toHaveURL(
+      "https://dashboard-test.zoefin.com/dashboard/pipeline"
+    );
+    await expect(page.getByRole("heading", { name: "Pipeline" })).toBeVisible();
+    await deleteMembersPage.deleteMembers();
+
   })
 });
